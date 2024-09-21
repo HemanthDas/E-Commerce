@@ -1,9 +1,49 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useMutation } from "@tanstack/react-query";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 
+interface RegisterData {
+  fullName: string;
+  email: string;
+  password: string;
+}
+
+const mutationFn = async (newUser: RegisterData) => {
+  const response = await fetch("http://localhost:8080/api/auth/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newUser),
+  });
+
+  if (!response.ok) {
+    throw new Error("Registration failed");
+  }
+
+  return response.json();
+};
+
 const Register = () => {
+  const navigate = useNavigate();
   const registerRef = useRef<HTMLDivElement>(null);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [fullName, setFullName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [errors, setErrors] = useState<Partial<RegisterData>>({});
+
+  const { status, mutate } = useMutation({
+    mutationFn,
+    onError: (error) => {
+      console.error("Error:", error);
+      alert("Registration failed, Email already exists");
+    },
+    onSuccess: (data) => {
+      alert(data.message);
+      navigate({to: "/authentication/login",search: {email: email}});
+    },
+  });
 
   useEffect(() => {
     if (registerRef.current) {
@@ -13,15 +53,6 @@ const Register = () => {
       });
     }
   }, []);
-
-  const [fullName, setFullName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [errors, setErrors] = useState<{
-    fullName?: string;
-    email?: string;
-    password?: string;
-  }>({});
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -48,7 +79,7 @@ const Register = () => {
       return;
     }
 
-    console.log("Submitting:", { fullName, email, password });
+    mutate({ fullName, email, password });
   };
 
   const togglePasswordVisibility = () => {
@@ -177,8 +208,9 @@ const Register = () => {
               <button
                 type="submit"
                 className="w-full bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                disabled={status === "pending"}
               >
-                Register
+                {status === "pending" ? "Registering..." : "Register"}
               </button>
 
               <div className="mt-4 flex justify-between text-sm text-gray-600">

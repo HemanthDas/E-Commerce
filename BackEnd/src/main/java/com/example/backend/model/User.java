@@ -12,18 +12,15 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Users {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
-    @Column(nullable = false,unique = true,length = 225)
-    private String username;
 
     @Column(nullable = false, unique = true, length = 255)
     private String email;
@@ -40,9 +37,9 @@ public class Users {
     @Column(columnDefinition = "TEXT")
     private String address;
 
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "ENUM('customer', 'admin') DEFAULT 'customer'")
-    private Role role = Role.CUSTOMER;
+//    @Enumerated(EnumType.STRING)
+//    @Column(columnDefinition = "ENUM('customer', 'admin') DEFAULT 'customer'")
+//    private Role role = Role.CUSTOMER;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -52,7 +49,14 @@ public class Users {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public enum Role {
-        CUSTOMER, ADMIN
-    }
+//    public enum Role {
+//        CUSTOMER, ADMIN;
+//
+//        public static Role fromString(String role) {
+//            if (role == null || role.isEmpty()) {
+//                return null; // or throw an exception
+//            }
+//            return Role.valueOf(role.toUpperCase());
+//        }
+//    }
 }

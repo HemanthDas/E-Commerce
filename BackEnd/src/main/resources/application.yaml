@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: BackEnd
+  datasource:
+    url: jdbc:mysql://localhost:3306/testecommerce
+    username: testadmin
+    password: tester
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  servlet:
+    context-path: "/api"

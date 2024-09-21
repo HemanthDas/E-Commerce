@@ -1,25 +1,37 @@
 package com.example.backend.controller;
 
-import com.example.backend.model.Users;
-import com.example.backend.service.UserService;
+import com.example.backend.model.User;
+import com.example.backend.service.AuthService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/auth")
 public class AuthenticationController {
-    private final UserService userService;
+    private final AuthService authService;
 
-    public AuthenticationController(UserService userService) {
-        this.userService = userService;
+    public AuthenticationController(AuthService authService) {
+        this.authService = authService;
+    }
+    @PostMapping(path = "/register")
+    public ResponseEntity<?> register(@RequestBody User user) {
+        User newUser = authService.RegisterUser(user);
+        if(newUser != null) {
+            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>("User already Exists with that Email", HttpStatus.CONFLICT);
     }
 
-    public Users register(Users user) {
-        Users newuser = new Users();
-        newuser.setUsername(user.getUsername());
-        newuser.setPassword(user.getPassword());
-        newuser.setEmail(user.getEmail());
-        newuser.setRole(user.getRole());
-        return newuser;
+    @PostMapping(path = "/login")
+    public ResponseEntity<?> login(@RequestBody User user) {
+        String userToken = authService.LoginUser(user);
+        if (userToken != null) {
+            return new ResponseEntity<>(userToken, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Invalid email or password", HttpStatus.UNAUTHORIZED);
     }
 }

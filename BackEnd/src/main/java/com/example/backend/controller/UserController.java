@@ -1,12 +1,7 @@
 package com.example.backend.controller;
-import com.example.backend.model.Users;
+import com.example.backend.model.User;
 import com.example.backend.service.UserService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/users")
@@ -16,5 +11,10 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+    @GetMapping("/email")
+    public User getUserEmail(@RequestParam String email) {
+        System.out.println(email);
+        return userService.getUserDetails(email);
     }
 }
