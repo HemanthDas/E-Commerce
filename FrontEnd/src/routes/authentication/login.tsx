@@ -1,29 +1,53 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useMutation } from "@tanstack/react-query";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { LoginData } from "../../api/authApi";
+import { useAuth } from "../../hooks/useAuth";
 
 const Login = () => {
   const loginRef = useRef<HTMLDivElement>(null);
+  const { handleLogin } = useAuth();
+  const navigate = useNavigate({ from: "/authentication/login" });
 
   useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate({ to: "/" });
+    }
+    document.title = "Login - E-commerce";
     if (loginRef.current) {
       loginRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
     }
-  }, []);
-
+  }, [navigate]);
+  console.log("Login rendered");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
-    {}
-  );
+  const [errors, setErrors] = useState<Partial<LoginData>>({});
 
+  const { mutate, status } = useMutation({
+    mutationFn: ({ email, password }: LoginData) =>
+      handleLogin(email, password),
+    onSuccess: (data) => {
+      console.log(data);
+      alert("Login successful");
+      navigate({ to: "/" });
+    },
+    onError: (error) => {
+      console.error("Error:", error);
+      alert(error.message);
+    },
+  });
+
+  // Toggle visibility of password
   const handlePasswordToggle = () => {
     setPasswordVisible((prev) => !prev);
-  };
+  };    
 
+  // Handle form submission
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    // Basic validation
     let hasError = false;
     const newErrors: { email?: string; password?: string } = {};
 
@@ -42,7 +66,8 @@ const Login = () => {
       return;
     }
 
-    console.log("Submitting:", { email, password });
+    // Trigger mutation (login request)
+    mutate({ email, password });
   };
 
   return (
@@ -147,9 +172,10 @@ const Login = () => {
 
               <button
                 type="submit"
+                disabled={status === "pending"}
                 className="w-full bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
-                Login
+                {status === "pending" ? "Loading..." : "Login"}
               </button>
 
               <div className="mt-4 flex justify-between text-sm text-gray-600">
@@ -171,3 +197,5 @@ const Login = () => {
 export const Route = createFileRoute("/authentication/login")({
   component: Login,
 });
+
+export default Login;

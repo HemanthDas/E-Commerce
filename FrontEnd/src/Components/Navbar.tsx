@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
+import { useAuth } from "../hooks/useAuth";
 const Navbar = () => {
   const [search, setSearch] = useState<string>("");
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -11,6 +12,7 @@ const Navbar = () => {
     setSearch(e.target.value);
     console.log(e.target.value);
   };
+  const { token, handleLogout, currentUser } = useAuth();
   return (
     <div className="flex flex-wrap justify-between items-center h-16 bg-white px-4">
       <Link to={"/"} className="h-full w-16">
@@ -32,12 +34,30 @@ const Navbar = () => {
         />
       </form>
       <div className="flex space-x-4 p-2">
-        <Link className="hidden md:block p-2" to="/" search={(prev)=>({...prev,pop:"location"})}>
+        <Link
+          className="hidden md:block p-2"
+          to="/"
+          search={(prev) => ({ ...prev, pop: "location" })}
+        >
           Location
         </Link>
-        <Link  className="p-2" to="/authentication/login">
-          Login
-        </Link>
+        {token ? (
+          <>
+            <span className="p-2">
+              Welcome, {currentUser?.fullname || "User"}
+            </span>
+            <Link className="p-2" to="/user/profile">
+              Profile
+            </Link>
+            <button className="p-2" onClick={handleLogout}>
+              Logout
+            </button>
+          </>
+        ) : (
+          <Link className="p-2" to="/authentication/login">
+            Login
+          </Link>
+        )}
       </div>
     </div>
   );

@@ -1,28 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-
-interface RegisterData {
-  fullName: string;
-  email: string;
-  password: string;
-}
-
-const mutationFn = async (newUser: RegisterData) => {
-  const response = await fetch("http://localhost:8080/api/auth/register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newUser),
-  });
-
-  if (!response.ok) {
-    throw new Error("Registration failed");
-  }
-
-  return response.json();
-};
+import { register, RegisterData } from "../../api/authApi";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -31,10 +10,10 @@ const Register = () => {
   const [fullName, setFullName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [errors, setErrors] = useState<Partial<RegisterData>>({});
+  const [errors, setErrors] = useState<Partial<Partial<RegisterData>>>({});
 
   const { status, mutate } = useMutation({
-    mutationFn,
+    mutationFn: register,
     onError: (error) => {
       console.error("Error:", error);
       alert("Registration failed, Email already exists");
