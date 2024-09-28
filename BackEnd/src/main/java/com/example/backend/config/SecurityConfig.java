@@ -37,6 +37,8 @@ public class SecurityConfig {
                     authorizeRequests
                             .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register")
                             .permitAll()
+                            .requestMatchers(HttpMethod.GET,"/getlocation")
+                            .permitAll()
                             .anyRequest()
                             .authenticated();
                 })
