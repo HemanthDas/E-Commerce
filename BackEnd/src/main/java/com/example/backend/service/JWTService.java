@@ -16,23 +16,25 @@ import java.util.Map;
 import java.util.function.Function;
 @Service
 public class JWTService {
-    private final String privateKey;
+// Replace this with a strong key
+    private final String privateKey = "R8fV7kz2x9P1q3Yv4Zt6W0mA5rNc8JqL0pTs3KdV6nXoH7G";
+    private final long expirationTimeInMillis = 1000 * 60 * 60 * 24 * 7;
 
-    public JWTService() {
-        try {
-            KeyGenerator keygen =KeyGenerator.getInstance("HmacSHA256");
-            SecretKey key = keygen.generateKey();
-            privateKey = Base64.getEncoder().encodeToString(key.getEncoded());
-        }catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    public JWTService() {
+//        try {
+//            KeyGenerator keygen =KeyGenerator.getInstance("HmacSHA256");
+//            SecretKey key = keygen.generateKey();
+//            privateKey = Base64.getEncoder().encodeToString(key.getEncoded());
+//        }catch (NoSuchAlgorithmException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     public String generateToken(String email) {
         Map<String,Object> claims = new HashMap<String,Object>();
         return Jwts.builder().claims().add(claims).subject(email)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
+                .expiration(new Date(System.currentTimeMillis() + expirationTimeInMillis))
                 .and().signWith(getkey()).compact();
     }
 
@@ -67,5 +69,9 @@ public class JWTService {
     }
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    public long getExpirationTime() {
+        return expirationTimeInMillis/1000;
     }
 }

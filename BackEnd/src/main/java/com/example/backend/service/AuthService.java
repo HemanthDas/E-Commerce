@@ -1,5 +1,8 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.LoginResponseDTO;
+import com.example.backend.dto.RegistrationResponseDTO;
+import com.example.backend.dto.UserInfoDTO;
 import com.example.backend.model.User;
 import com.example.backend.repository.UsersRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,24 +23,37 @@ public class AuthService {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
     }
-    public User RegisterUser(User user) {
+    public RegistrationResponseDTO RegisterUser(User user) {
         if(usersRepository.existsByEmail(user.getEmail())) {
-            return null;
+            return new RegistrationResponseDTO();
         }
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        return usersRepository.save(user);
+         usersRepository.save(user);
+        return new RegistrationResponseDTO(true);
     }
-    public String LoginUser(User user) {
+    public LoginResponseDTO LoginUser(User user) {
         try {
+            User loggedInUser = usersRepository.findByEmail(user.getEmail());
+            if(loggedInUser == null) {return null;}
             Authentication authentication = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
             if(authentication.isAuthenticated()) {
-                return jwtService.generateToken(user.getEmail());
+
+                String token = jwtService.generateToken(user.getEmail());
+                long expiredIn = jwtService.getExpirationTime();
+                UserInfoDTO userInfoDTO = new UserInfoDTO(
+                        loggedInUser.getId(),
+                        loggedInUser.getFullName(),
+                        loggedInUser.getEmail());
+
+                return new LoginResponseDTO(
+                        token,
+                        expiredIn,
+                        userInfoDTO
+                );
             }
         }catch (AuthenticationException e) {
-            System.out.println(e.getMessage());
             e.printStackTrace();
-            return null;
         }
         return null;
     }

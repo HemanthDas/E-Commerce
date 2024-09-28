@@ -18,7 +18,6 @@ const Login = () => {
       loginRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }, [navigate]);
-  console.log("Login rendered");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
@@ -27,8 +26,7 @@ const Login = () => {
   const { mutate, status } = useMutation({
     mutationFn: ({ email, password }: LoginData) =>
       handleLogin(email, password),
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       alert("Login successful");
       navigate({ to: "/" });
     },
@@ -41,7 +39,7 @@ const Login = () => {
   // Toggle visibility of password
   const handlePasswordToggle = () => {
     setPasswordVisible((prev) => !prev);
-  };    
+  };
 
   // Handle form submission
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

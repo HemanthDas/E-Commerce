@@ -1,13 +1,14 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.LoginResponseDTO;
+import com.example.backend.dto.RegistrationResponseDTO;
 import com.example.backend.model.User;
 import com.example.backend.service.AuthService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/auth")
@@ -19,19 +20,26 @@ public class AuthenticationController {
     }
     @PostMapping(path = "/register")
     public ResponseEntity<?> register(@RequestBody User user) {
-        User newUser = authService.RegisterUser(user);
-        if(newUser != null) {
-            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        RegistrationResponseDTO responseDTO = authService.RegisterUser(user);
+        if(responseDTO.success) {
+            return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
         }
-        return new ResponseEntity<>("User already Exists with that Email", HttpStatus.CONFLICT);
+        System.out.println(new RegistrationResponseDTO());
+        return new ResponseEntity<>( new RegistrationResponseDTO(), HttpStatus.CONFLICT);
     }
 
-    @PostMapping(path = "/login")
-    public ResponseEntity<?> login(@RequestBody User user) {
-        String userToken = authService.LoginUser(user);
-        if (userToken != null) {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody User user, HttpServletResponse response) {
+        LoginResponseDTO userToken = authService.LoginUser(user);
+        if (userToken.getToken() != null) {
+            Cookie cookie = new Cookie("token", userToken.getToken());
+            response.addCookie(cookie);
             return new ResponseEntity<>(userToken, HttpStatus.OK);
         }
         return new ResponseEntity<>("Invalid email or password", HttpStatus.UNAUTHORIZED);
+    }
+    @GetMapping("/verify-token")
+    public ResponseEntity<?> verifyToken() {
+            return new ResponseEntity<>("Token is Validated ", HttpStatus.OK);
     }
 }
