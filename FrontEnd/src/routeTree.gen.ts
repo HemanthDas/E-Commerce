@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as UserAddressImport } from './routes/user/address'
 import { Route as AuthenticationRegisterImport } from './routes/authentication/register'
 import { Route as AuthenticationLoginImport } from './routes/authentication/login'
 
@@ -38,6 +39,11 @@ const UserCartLazyRoute = UserCartLazyImport.update({
   path: '/user/cart',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/user/cart.lazy').then((d) => d.Route))
+
+const UserAddressRoute = UserAddressImport.update({
+  path: '/user/address',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AuthenticationRegisterRoute = AuthenticationRegisterImport.update({
   path: '/authentication/register',
@@ -74,6 +80,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticationRegisterImport
       parentRoute: typeof rootRoute
     }
+    '/user/address': {
+      id: '/user/address'
+      path: '/user/address'
+      fullPath: '/user/address'
+      preLoaderRoute: typeof UserAddressImport
+      parentRoute: typeof rootRoute
+    }
     '/user/cart': {
       id: '/user/cart'
       path: '/user/cart'
@@ -97,6 +110,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/authentication/login': typeof AuthenticationLoginRoute
   '/authentication/register': typeof AuthenticationRegisterRoute
+  '/user/address': typeof UserAddressRoute
   '/user/cart': typeof UserCartLazyRoute
   '/user/profile': typeof UserProfileLazyRoute
 }
@@ -105,6 +119,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/authentication/login': typeof AuthenticationLoginRoute
   '/authentication/register': typeof AuthenticationRegisterRoute
+  '/user/address': typeof UserAddressRoute
   '/user/cart': typeof UserCartLazyRoute
   '/user/profile': typeof UserProfileLazyRoute
 }
@@ -114,6 +129,7 @@ export interface FileRoutesById {
   '/': typeof IndexLazyRoute
   '/authentication/login': typeof AuthenticationLoginRoute
   '/authentication/register': typeof AuthenticationRegisterRoute
+  '/user/address': typeof UserAddressRoute
   '/user/cart': typeof UserCartLazyRoute
   '/user/profile': typeof UserProfileLazyRoute
 }
@@ -124,6 +140,7 @@ export interface FileRouteTypes {
     | '/'
     | '/authentication/login'
     | '/authentication/register'
+    | '/user/address'
     | '/user/cart'
     | '/user/profile'
   fileRoutesByTo: FileRoutesByTo
@@ -131,6 +148,7 @@ export interface FileRouteTypes {
     | '/'
     | '/authentication/login'
     | '/authentication/register'
+    | '/user/address'
     | '/user/cart'
     | '/user/profile'
   id:
@@ -138,6 +156,7 @@ export interface FileRouteTypes {
     | '/'
     | '/authentication/login'
     | '/authentication/register'
+    | '/user/address'
     | '/user/cart'
     | '/user/profile'
   fileRoutesById: FileRoutesById
@@ -147,6 +166,7 @@ export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   AuthenticationLoginRoute: typeof AuthenticationLoginRoute
   AuthenticationRegisterRoute: typeof AuthenticationRegisterRoute
+  UserAddressRoute: typeof UserAddressRoute
   UserCartLazyRoute: typeof UserCartLazyRoute
   UserProfileLazyRoute: typeof UserProfileLazyRoute
 }
@@ -155,6 +175,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   AuthenticationLoginRoute: AuthenticationLoginRoute,
   AuthenticationRegisterRoute: AuthenticationRegisterRoute,
+  UserAddressRoute: UserAddressRoute,
   UserCartLazyRoute: UserCartLazyRoute,
   UserProfileLazyRoute: UserProfileLazyRoute,
 }
@@ -174,6 +195,7 @@ export const routeTree = rootRoute
         "/",
         "/authentication/login",
         "/authentication/register",
+        "/user/address",
         "/user/cart",
         "/user/profile"
       ]
@@ -186,6 +208,9 @@ export const routeTree = rootRoute
     },
     "/authentication/register": {
       "filePath": "authentication/register.tsx"
+    },
+    "/user/address": {
+      "filePath": "user/address.tsx"
     },
     "/user/cart": {
       "filePath": "user/cart.lazy.tsx"

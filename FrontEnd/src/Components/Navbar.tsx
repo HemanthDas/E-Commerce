@@ -7,9 +7,9 @@ import PopupModel from "./PopupModel";
 const Navbar = () => {
   const location = useLocation();
   const popSearch: { pop?: string } = useSearch({ strict: false });
-  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const [isMenuVisible, setIsMenuVisible] = useState(false);
-
+  const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false);
+  const [isMenuVisible, setIsMenuVisible] = useState<boolean>(false);
+  const { userLocation } = useAuth();
   const toggleDropdownVisible = () => {
     setIsDropdownVisible(!isDropdownVisible);
   };
@@ -26,7 +26,6 @@ const Navbar = () => {
     setIsMenuVisible(!isMenuVisible);
   };
 
-  // This effect adds or removes overflow-hidden to the body when the menu is visible
   useEffect(() => {
     if (isMenuVisible) {
       document.body.style.overflow = "hidden";
@@ -34,7 +33,7 @@ const Navbar = () => {
       document.body.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = ""; // Cleanup on unmount
+      document.body.style.overflow = "";
     };
   }, [isMenuVisible]);
 
@@ -77,7 +76,7 @@ const Navbar = () => {
             to={location.pathname}
             search={(prev) => ({ ...prev, pop: "location" })}
           >
-            Location
+            {userLocation?.location || "Location"}
           </Link>
           {token ? (
             <>

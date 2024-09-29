@@ -8,11 +8,16 @@ type AuthContext = {
     fullname: string;
     email: string;
   } | null;
+  userLocation?: {
+    location: string;
+    pincode: number;
+  } | null;
   handleLogin: (
     email: string,
     password: string
   ) => Promise<{ token: string; userInfo: object }>;
   handleLogout: () => Promise<void>;
+  updateLocation: (location: string, pincode: number) => void;
 };
 
 export const AuthContext = createContext<AuthContext | undefined>(undefined);
@@ -32,7 +37,18 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       ? JSON.parse(localStorage.getItem("currentUser")!)
       : null
   );
-
+  const [userLocation, setUserLocation] = useState<{
+    location: string;
+    pincode: number;
+  } | null>(
+    localStorage.getItem("location")
+      ? JSON.parse(localStorage.getItem("location")!)
+      : null
+  );
+  const updateLocation = (location: string, pincode: number) => {
+    setUserLocation({ location, pincode });
+    localStorage.setItem("location", JSON.stringify({ location, pincode }));
+  };
   const handleLogin = async (email: string, password: string) => {
     try {
       const response = await login({ email, password });
@@ -69,7 +85,14 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   };
   return (
     <AuthContext.Provider
-      value={{ token: authToken, currentUser, handleLogin, handleLogout }}
+      value={{
+        token: authToken,
+        currentUser,
+        userLocation,
+        handleLogin,
+        handleLogout,
+        updateLocation,
+      }}
     >
       {children}
     </AuthContext.Provider>
