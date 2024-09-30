@@ -72,9 +72,10 @@ const Navbar = () => {
           } transition-transform duration-500 flex space-x-4 items-center max-sm:absolute max-sm:right-0 max-sm:top-16 max-sm:bg-white max-sm:w-full max-sm:shadow-lg sm:static sm:w-auto`}
         >
           <Link
-            className="p-2"
+            className="p-2 max-lg:max-w-48"
             to={location.pathname}
             search={(prev) => ({ ...prev, pop: "location" })}
+            
           >
             {userLocation?.location || "Location"}
           </Link>
