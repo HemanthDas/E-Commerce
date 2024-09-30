@@ -9,6 +9,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -34,8 +36,9 @@ public class User {
     @Column(name = "phone_number", length = 15)
     private String phoneNumber;
 
-    @Column(columnDefinition = "TEXT")
-    private String address;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Address> addresses = new ArrayList<>();
+
 
 //    @Enumerated(EnumType.STRING)
 //    @Column(columnDefinition = "ENUM('customer', 'admin') DEFAULT 'customer'")
