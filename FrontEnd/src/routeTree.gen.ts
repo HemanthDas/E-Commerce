@@ -13,9 +13,11 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as UserAddressImport } from './routes/user/address'
 import { Route as AuthenticationRegisterImport } from './routes/authentication/register'
 import { Route as AuthenticationLoginImport } from './routes/authentication/login'
+import { Route as UserAddressIndexImport } from './routes/user/address/index'
+import { Route as UserAddressAddAddressImport } from './routes/user/address/add-address'
+import { Route as UserAddressAddressImport } from './routes/user/address/$address'
 
 // Create Virtual Routes
 
@@ -40,11 +42,6 @@ const UserCartLazyRoute = UserCartLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/user/cart.lazy').then((d) => d.Route))
 
-const UserAddressRoute = UserAddressImport.update({
-  path: '/user/address',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const AuthenticationRegisterRoute = AuthenticationRegisterImport.update({
   path: '/authentication/register',
   getParentRoute: () => rootRoute,
@@ -52,6 +49,21 @@ const AuthenticationRegisterRoute = AuthenticationRegisterImport.update({
 
 const AuthenticationLoginRoute = AuthenticationLoginImport.update({
   path: '/authentication/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const UserAddressIndexRoute = UserAddressIndexImport.update({
+  path: '/user/address/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const UserAddressAddAddressRoute = UserAddressAddAddressImport.update({
+  path: '/user/address/add-address',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const UserAddressAddressRoute = UserAddressAddressImport.update({
+  path: '/user/address/$address',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -80,13 +92,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticationRegisterImport
       parentRoute: typeof rootRoute
     }
-    '/user/address': {
-      id: '/user/address'
-      path: '/user/address'
-      fullPath: '/user/address'
-      preLoaderRoute: typeof UserAddressImport
-      parentRoute: typeof rootRoute
-    }
     '/user/cart': {
       id: '/user/cart'
       path: '/user/cart'
@@ -101,6 +106,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserProfileLazyImport
       parentRoute: typeof rootRoute
     }
+    '/user/address/$address': {
+      id: '/user/address/$address'
+      path: '/user/address/$address'
+      fullPath: '/user/address/$address'
+      preLoaderRoute: typeof UserAddressAddressImport
+      parentRoute: typeof rootRoute
+    }
+    '/user/address/add-address': {
+      id: '/user/address/add-address'
+      path: '/user/address/add-address'
+      fullPath: '/user/address/add-address'
+      preLoaderRoute: typeof UserAddressAddAddressImport
+      parentRoute: typeof rootRoute
+    }
+    '/user/address/': {
+      id: '/user/address/'
+      path: '/user/address'
+      fullPath: '/user/address'
+      preLoaderRoute: typeof UserAddressIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -110,18 +136,22 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/authentication/login': typeof AuthenticationLoginRoute
   '/authentication/register': typeof AuthenticationRegisterRoute
-  '/user/address': typeof UserAddressRoute
   '/user/cart': typeof UserCartLazyRoute
   '/user/profile': typeof UserProfileLazyRoute
+  '/user/address/$address': typeof UserAddressAddressRoute
+  '/user/address/add-address': typeof UserAddressAddAddressRoute
+  '/user/address': typeof UserAddressIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/authentication/login': typeof AuthenticationLoginRoute
   '/authentication/register': typeof AuthenticationRegisterRoute
-  '/user/address': typeof UserAddressRoute
   '/user/cart': typeof UserCartLazyRoute
   '/user/profile': typeof UserProfileLazyRoute
+  '/user/address/$address': typeof UserAddressAddressRoute
+  '/user/address/add-address': typeof UserAddressAddAddressRoute
+  '/user/address': typeof UserAddressIndexRoute
 }
 
 export interface FileRoutesById {
@@ -129,9 +159,11 @@ export interface FileRoutesById {
   '/': typeof IndexLazyRoute
   '/authentication/login': typeof AuthenticationLoginRoute
   '/authentication/register': typeof AuthenticationRegisterRoute
-  '/user/address': typeof UserAddressRoute
   '/user/cart': typeof UserCartLazyRoute
   '/user/profile': typeof UserProfileLazyRoute
+  '/user/address/$address': typeof UserAddressAddressRoute
+  '/user/address/add-address': typeof UserAddressAddAddressRoute
+  '/user/address/': typeof UserAddressIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -140,25 +172,31 @@ export interface FileRouteTypes {
     | '/'
     | '/authentication/login'
     | '/authentication/register'
-    | '/user/address'
     | '/user/cart'
     | '/user/profile'
+    | '/user/address/$address'
+    | '/user/address/add-address'
+    | '/user/address'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/authentication/login'
     | '/authentication/register'
-    | '/user/address'
     | '/user/cart'
     | '/user/profile'
+    | '/user/address/$address'
+    | '/user/address/add-address'
+    | '/user/address'
   id:
     | '__root__'
     | '/'
     | '/authentication/login'
     | '/authentication/register'
-    | '/user/address'
     | '/user/cart'
     | '/user/profile'
+    | '/user/address/$address'
+    | '/user/address/add-address'
+    | '/user/address/'
   fileRoutesById: FileRoutesById
 }
 
@@ -166,18 +204,22 @@ export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   AuthenticationLoginRoute: typeof AuthenticationLoginRoute
   AuthenticationRegisterRoute: typeof AuthenticationRegisterRoute
-  UserAddressRoute: typeof UserAddressRoute
   UserCartLazyRoute: typeof UserCartLazyRoute
   UserProfileLazyRoute: typeof UserProfileLazyRoute
+  UserAddressAddressRoute: typeof UserAddressAddressRoute
+  UserAddressAddAddressRoute: typeof UserAddressAddAddressRoute
+  UserAddressIndexRoute: typeof UserAddressIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   AuthenticationLoginRoute: AuthenticationLoginRoute,
   AuthenticationRegisterRoute: AuthenticationRegisterRoute,
-  UserAddressRoute: UserAddressRoute,
   UserCartLazyRoute: UserCartLazyRoute,
   UserProfileLazyRoute: UserProfileLazyRoute,
+  UserAddressAddressRoute: UserAddressAddressRoute,
+  UserAddressAddAddressRoute: UserAddressAddAddressRoute,
+  UserAddressIndexRoute: UserAddressIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -195,9 +237,11 @@ export const routeTree = rootRoute
         "/",
         "/authentication/login",
         "/authentication/register",
-        "/user/address",
         "/user/cart",
-        "/user/profile"
+        "/user/profile",
+        "/user/address/$address",
+        "/user/address/add-address",
+        "/user/address/"
       ]
     },
     "/": {
@@ -209,14 +253,20 @@ export const routeTree = rootRoute
     "/authentication/register": {
       "filePath": "authentication/register.tsx"
     },
-    "/user/address": {
-      "filePath": "user/address.tsx"
-    },
     "/user/cart": {
       "filePath": "user/cart.lazy.tsx"
     },
     "/user/profile": {
       "filePath": "user/profile.lazy.tsx"
+    },
+    "/user/address/$address": {
+      "filePath": "user/address/$address.tsx"
+    },
+    "/user/address/add-address": {
+      "filePath": "user/address/add-address.tsx"
+    },
+    "/user/address/": {
+      "filePath": "user/address/index.tsx"
     }
   }
 }

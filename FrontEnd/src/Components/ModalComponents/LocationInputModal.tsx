@@ -19,6 +19,7 @@ const LocationInputModal = () => {
   const closePopModel = () => {
     navigate({ search: undefined });
   };
+
   const { data: addresses, isLoading } = useQuery({
     queryKey: ["location"],
     queryFn: () => {
@@ -28,6 +29,7 @@ const LocationInputModal = () => {
       return getAllLocationswithID(currentUser.id);
     },
   });
+
   const { mutate } = useMutation({
     mutationFn: getLocationWithPincode,
     onSuccess: (data) => {
@@ -42,36 +44,44 @@ const LocationInputModal = () => {
     },
     mutationKey: ["location"],
   });
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length > 6) return;
-    setPincode(parseInt(e.target.value));
+    const value = e.target.value;
+    if (value.length > 6) return;
+    setPincode(parseInt(value) || 0);
   };
+
   const handleSubmit = () => {
     if (pincode.toString().length !== 6) {
-      alert("Please enter a valid postalcode");
+      alert("Please enter a valid postal code");
       return;
     }
     mutate(pincode);
   };
+
   const handleUpdateLocation = (address: Address) => {
-    updateLocation(address.city + "," + address.state, pincode);
+    updateLocation(
+      `${address.postalCode} - ${address.city}, ${address.state}`,
+      pincode
+    );
     closePopModel();
   };
+
   return (
-    <div className="w-96 max-sm:w-72 h-full bg-white rounded-lg ">
+    <div className="w-96 max-sm:w-72 h-full bg-white rounded-lg">
       <h1 className="p-4 bg-slate-400">Choose a location</h1>
       <div className="p-4">
-        <div>
-          {isLoading ? (
-            <div>Loading...</div>
-          ) : (
-            <div>
-              {addresses.map((address: Address) => {
-                return (
+        {currentUser ? (
+          <div>
+            {isLoading ? (
+              <div>Loading...</div>
+            ) : (
+              <div>
+                {addresses?.map((address: Address) => (
                   <div
                     key={address.id}
                     className={
-                      "rounded border-gray-500 border" +
+                      "rounded border-gray-500 border cursor-pointer" +
                       (userLocation?.pincode === Number(address.postalCode)
                         ? " bg-slate-200"
                         : "")
@@ -80,35 +90,29 @@ const LocationInputModal = () => {
                   >
                     <h1>{address.recipientName}</h1>
                     <p>
-                      {address.street +
-                        " " +
-                        address.city +
-                        " " +
-                        address.country +
-                        " " +
-                        address.postalCode +
-                        " " +
-                        address.state}
+                      {`${address.street} ${address.city} ${address.country} ${address.postalCode} ${address.state}`}
                     </p>
                   </div>
-                );
-              })}
-            </div>
-          )}
-          <Link to="/user/address" className="underline text-teal-400">
-            add address or a pick-up location
-          </Link>
-        </div>
+                ))}
+              </div>
+            )}
+            <Link to="/user/address" className="underline text-teal-400">
+              Add address or a pick-up location
+            </Link>
+          </div>
+        ) : (
+          <>SignUp First</>
+        )}
         <div className="flex space-x-1">
           <input
             type="number"
-            placeholder="Enter your postalcode"
+            placeholder="Enter your postal code"
             className="w-full p-2 flex-grow border-2 border-slate-200 rounded-3xl"
             onChange={handleChange}
             value={pincode}
           />
           <button
-            className="w-full p-2  flex-1 border-2 border-slate-200 rounded-3xl"
+            className="w-full p-2 flex-1 border-2 border-slate-200 rounded-3xl"
             onClick={handleSubmit}
           >
             Submit
