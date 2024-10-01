@@ -23,6 +23,9 @@ public class Address {
     @Column(nullable = false, length = 255)
     private String street;
 
+    @Column(nullable = false,name = "phone_number",length = 11)
+    private String phonenumber;
+
     @Column(nullable = false, length = 255)
     private String recipientName;
 
@@ -42,4 +45,7 @@ public class Address {
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore // Prevent recursive serialization
     private User user;
+
+    @Column(nullable = false,name = "is_default")
+    private boolean isDefault;
 }

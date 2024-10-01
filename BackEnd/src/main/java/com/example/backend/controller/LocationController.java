@@ -29,7 +29,7 @@ public class LocationController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<List<Address>> getAllAddress(@PathVariable UUID userId) {
         List<Address> addresses = locationService.getAddressesByUserId(userId);
 
@@ -39,10 +39,37 @@ public class LocationController {
 
         return ResponseEntity.ok(addresses);
     }
-
-    @PostMapping("/user/{userId}/add")
+    @GetMapping("/single/{addressId}")
+    public ResponseEntity<Address> getSingleAddress(@PathVariable UUID addressId) {
+        Address address = locationService.getAddress(addressId);
+        if(address != null) {
+            return ResponseEntity.ok(address);
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+    @PostMapping("/{userId}/add")
     public ResponseEntity<Address> addAddress(@PathVariable UUID userId, @RequestBody Address address) {
         Address savedAddress = locationService.addAddress(address, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedAddress);
+    }
+
+    @PutMapping("/{userId}/update")
+    public ResponseEntity<Address> putAddress(@PathVariable UUID userId, @RequestBody Address address) {
+        System.out.println(userId);
+        Address updatedAddress = locationService.updateAddress(address,userId);
+        if(updatedAddress != null) {
+            return ResponseEntity.ok(updatedAddress);
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(address);
+    }
+
+    @DeleteMapping("/{userId}/delete/{addressId}")
+    public ResponseEntity<Address> deleteAddress(@PathVariable UUID userId, @PathVariable UUID addressId) {
+        boolean isDeleted = locationService.deleteAddress(addressId);
+        if (isDeleted) {
+            return ResponseEntity.ok().build();
+        }else {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
     }
 }

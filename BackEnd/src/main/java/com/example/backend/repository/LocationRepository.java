@@ -10,4 +10,7 @@ import java.util.UUID;
 @Repository
 public interface LocationRepository extends JpaRepository<Address, UUID> {
     List<Address> findAddressesByUser_Id(UUID id);
+    Address findAddressById(UUID id);
+    Address findByUserIdAndIsDefaultTrue(UUID userId);
+    Address findByUserIdAndId(UUID id, UUID addressId);
 }
