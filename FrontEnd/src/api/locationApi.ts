@@ -22,7 +22,7 @@ export type AddAddressType = {
 
 export const getLocationWithPincode = async (pincode: number) => {
   const response = await fetch(
-    `http://localhost:8080/api/getlocation?pincode=${pincode}`
+    `${import.meta.env.VITE_BACKEND_URL}/api/getlocation?pincode=${pincode}`
   );
   if (!response.ok) {
     throw new Error("Location not found");
@@ -31,11 +31,14 @@ export const getLocationWithPincode = async (pincode: number) => {
   return data;
 };
 export const getLocationById = async (id: string) => {
-  const response = await fetch(`http://localhost:8080/api/address/single/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  });
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/api/address/single/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }
+  );
   if (!response.ok) {
     throw new Error("Location not found");
   }
@@ -43,11 +46,14 @@ export const getLocationById = async (id: string) => {
   return data;
 };
 export const getAllLocationswithID = async (id: string) => {
-  const response = await fetch(`http://localhost:8080/api/address/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  });
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/api/address/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }
+  );
   if (response.status === 204) {
     return [];
   }
@@ -58,14 +64,17 @@ export const getAllLocationswithID = async (id: string) => {
   return data;
 };
 export const addLocation = async (address: AddAddressType, id: string) => {
-  const response = await fetch(`http://localhost:8080/api/address/${id}/add`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-    body: JSON.stringify(address),
-  });
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/api/address/${id}/add`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(address),
+    }
+  );
   if (!response.ok) {
     throw new Error("Location not added");
   }
@@ -75,7 +84,7 @@ export const addLocation = async (address: AddAddressType, id: string) => {
 
 export const removeLocation = async (userId: string, addressId: string) => {
   const response = await fetch(
-    `http://localhost:8080/api/address/${userId}/delete/${addressId}`,
+    `${import.meta.env.VITE_BACKEND_URL}/api/address/${userId}/delete/${addressId}`,
     {
       method: "DELETE",
       headers: {
@@ -94,7 +103,7 @@ export const updateLocation = async (
   address: AddAddressType
 ) => {
   const response = await fetch(
-    `http://localhost:8080/api/address/${userId}/update`,
+    `${import.meta.env.VITE_BACKEND_URL}/api/address/${userId}/update`,
     {
       method: "PUT",
       headers: {

@@ -1,1 +1,6 @@
-node-modules
+node_modules
+build
+.git
+.env
+*.log
+*.tmp
