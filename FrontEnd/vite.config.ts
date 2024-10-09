@@ -7,4 +7,9 @@ export default defineConfig({
   server: {
     host: true,
   },
+  define: {
+    NODE_ENV: {
+      "process.env.NODE_ENV": '"production"',
+    },
+  },
 });

@@ -17,10 +17,14 @@ RUN npm run build
 
 # Step 2: Serve the static files using Nginx
 FROM nginx:alpine
-ENV VITE_BACKEND_URL=http://localhost:8080
+
+# Check if the .env file exists; if not, don't copy
+COPY .env /app/.env
+
 # Copy the built files from the 'build' stage to the Nginx html folder
 COPY --from=build /app/dist /usr/share/nginx/html
 
+# Copy nginx config if exists
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80 to the outside world

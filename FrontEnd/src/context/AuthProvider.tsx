@@ -52,7 +52,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const handleLogin = async (email: string, password: string) => {
     try {
       const response = await login({ email, password });
-      console.log(response);
       if (response.token) {
         setAuthToken(response.token);
         setCurrentUser(response.userInfo);
