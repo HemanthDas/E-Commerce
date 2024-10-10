@@ -6,10 +6,9 @@ services:
     build:
       context: ./FrontEnd # Ensure this matches the Dockerfile location for your React app
       dockerfile: Dockerfile
+      args:
+        VITE_BACKEND_URL: http://localhost:8000
     container_name: react-app
-    environment:
-      - NODE_ENV=production
-      - BACKEND_URL=http://localhost:8080
     networks:
       - my-network
     depends_on:

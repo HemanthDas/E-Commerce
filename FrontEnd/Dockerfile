@@ -11,15 +11,13 @@ RUN npm install
 
 # Copy the rest of the application files
 COPY . .
-
+ARG VITE_BACKEND_URL
+ENV VITE_BACKEND_URL=$VITE_BACKEND_URL
 # Build the application for production
 RUN npm run build
 
 # Step 2: Serve the static files using Nginx
 FROM nginx:alpine
-
-# Check if the .env file exists; if not, don't copy
-COPY .env /app/.env
 
 # Copy the built files from the 'build' stage to the Nginx html folder
 COPY --from=build /app/dist /usr/share/nginx/html
