@@ -39,10 +39,20 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Address> addresses = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "ENUM('CUSTOMER', 'ADMIN') DEFAULT 'CUSTOMER'")
+    private Role role = Role.CUSTOMER;
 
-//    @Enumerated(EnumType.STRING)
-//    @Column(columnDefinition = "ENUM('customer', 'admin') DEFAULT 'customer'")
-//    private Role role = Role.CUSTOMER;
+        public enum Role {
+            CUSTOMER, ADMIN;
+
+            public static Role fromString(String role) {
+                if (role == null || role.isEmpty()) {
+                    return null;
+                }
+                return Role.valueOf(role.toUpperCase());
+            }
+        }
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -51,15 +61,4 @@ public class User {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-//    public enum Role {
-//        CUSTOMER, ADMIN;
-//
-//        public static Role fromString(String role) {
-//            if (role == null || role.isEmpty()) {
-//                return null; // or throw an exception
-//            }
-//            return Role.valueOf(role.toUpperCase());
-//        }
-//    }
 }
