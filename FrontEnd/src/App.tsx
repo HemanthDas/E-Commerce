@@ -1,7 +1,13 @@
-import "./App.css";
+import ProductsList from "./Components/MainPageComponents/ProductsList";
+import Carousel from "./Components/MainPageComponents/Carousel";
 
 function App() {
-  return <div>Main </div>;
+  return (
+    <div className="h-full bg-white">
+      <Carousel />
+      <ProductsList />
+    </div>
+  );
 }
 
 export default App;
