@@ -6,7 +6,7 @@ import {
   getAllCategories,
   getAllProducts,
 } from "../../api/productApi";
-import ProductBox from "../productBox";
+import ProductBox from "../ProductBox";
 
 const ProductsList = () => {
   const { data, isLoading } = useQuery<AllProducts[]>({
@@ -48,7 +48,7 @@ const ProductsList = () => {
   }
 
   return (
-    <div className="w-full bg-gray-50 p-6 rounded-lg shadow-md">
+    <div className="w-full p-6 rounded-lg shadow-md">
       {Object.entries(groupedProducts).map(
         ([categoryId, products]: [string, AllProducts[]]) => (
           <div key={categoryId} className="mb-12">

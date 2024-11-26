@@ -10,6 +10,24 @@ export type AllCategories = {
   name: string;
   description: string;
 };
+export type ProductDTO = {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  description: string;
+  category: AllCategories;
+  image: string;
+};
+export type OtherProductDto = {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  description: string;
+  categoryId: string;
+  imageUrl: string;
+};
 export const getAllProducts = async () => {
   const response = await fetch(
     `${import.meta.env.VITE_BACKEND_URL}/api/product/getAll`
@@ -19,6 +37,7 @@ export const getAllProducts = async () => {
   }
   return response.json();
 };
+
 export const getAllCategories = async () => {
   const response = await fetch(
     `${import.meta.env.VITE_BACKEND_URL}/api/category/all`
@@ -28,6 +47,17 @@ export const getAllCategories = async () => {
   }
   return response.json();
 };
+
+export const getProductByCategory = async (categoryId: string) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/api/product/category?category=${categoryId}`
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
+  }
+  return response.json();
+};
+
 export const getProductById = async (id: string) => {
   const response = await fetch(
     `${import.meta.env.VITE_BACKEND_URL}/api/product/get/${id}`

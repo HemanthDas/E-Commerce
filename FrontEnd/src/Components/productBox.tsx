@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { AllProducts } from "../api/productApi";
+import { encodeId } from "../utils/Encoder";
 
 const ProductBox = (product: AllProducts) => {
-  const encodeId = (id: string) => window.btoa(id);
   return (
     <Link
       to={`/product/${encodeId(product.product_id)}`}
@@ -20,7 +20,10 @@ const ProductBox = (product: AllProducts) => {
         {product.product_name}
       </div>
       <div className="text-lg text-green-600 text-center px-2 mb-4">
-        ${product.product_price}
+        <span className="line-through text-red-500 p-1">
+          &#8377;{Number(product.product_price) + 100}
+        </span>
+        &#8377;{product.product_price}
       </div>
     </Link>
   );

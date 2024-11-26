@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as CartIndexImport } from './routes/cart/index'
 import { Route as ProductProductIdImport } from './routes/product/$productId'
 import { Route as AuthenticationRegisterImport } from './routes/authentication/register'
 import { Route as AuthenticationLoginImport } from './routes/authentication/login'
@@ -32,6 +33,11 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const CartIndexRoute = CartIndexImport.update({
+  path: '/cart/',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const UserProfileLazyRoute = UserProfileLazyImport.update({
   path: '/user/profile',
@@ -119,6 +125,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserProfileLazyImport
       parentRoute: typeof rootRoute
     }
+    '/cart/': {
+      id: '/cart/'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/user/address/$address': {
       id: '/user/address/$address'
       path: '/user/address/$address'
@@ -152,6 +165,7 @@ export interface FileRoutesByFullPath {
   '/product/$productId': typeof ProductProductIdRoute
   '/user/cart': typeof UserCartLazyRoute
   '/user/profile': typeof UserProfileLazyRoute
+  '/cart': typeof CartIndexRoute
   '/user/address/$address': typeof UserAddressAddressRoute
   '/user/address/add-address': typeof UserAddressAddAddressRoute
   '/user/address': typeof UserAddressIndexRoute
@@ -164,6 +178,7 @@ export interface FileRoutesByTo {
   '/product/$productId': typeof ProductProductIdRoute
   '/user/cart': typeof UserCartLazyRoute
   '/user/profile': typeof UserProfileLazyRoute
+  '/cart': typeof CartIndexRoute
   '/user/address/$address': typeof UserAddressAddressRoute
   '/user/address/add-address': typeof UserAddressAddAddressRoute
   '/user/address': typeof UserAddressIndexRoute
@@ -177,6 +192,7 @@ export interface FileRoutesById {
   '/product/$productId': typeof ProductProductIdRoute
   '/user/cart': typeof UserCartLazyRoute
   '/user/profile': typeof UserProfileLazyRoute
+  '/cart/': typeof CartIndexRoute
   '/user/address/$address': typeof UserAddressAddressRoute
   '/user/address/add-address': typeof UserAddressAddAddressRoute
   '/user/address/': typeof UserAddressIndexRoute
@@ -191,6 +207,7 @@ export interface FileRouteTypes {
     | '/product/$productId'
     | '/user/cart'
     | '/user/profile'
+    | '/cart'
     | '/user/address/$address'
     | '/user/address/add-address'
     | '/user/address'
@@ -202,6 +219,7 @@ export interface FileRouteTypes {
     | '/product/$productId'
     | '/user/cart'
     | '/user/profile'
+    | '/cart'
     | '/user/address/$address'
     | '/user/address/add-address'
     | '/user/address'
@@ -213,6 +231,7 @@ export interface FileRouteTypes {
     | '/product/$productId'
     | '/user/cart'
     | '/user/profile'
+    | '/cart/'
     | '/user/address/$address'
     | '/user/address/add-address'
     | '/user/address/'
@@ -226,6 +245,7 @@ export interface RootRouteChildren {
   ProductProductIdRoute: typeof ProductProductIdRoute
   UserCartLazyRoute: typeof UserCartLazyRoute
   UserProfileLazyRoute: typeof UserProfileLazyRoute
+  CartIndexRoute: typeof CartIndexRoute
   UserAddressAddressRoute: typeof UserAddressAddressRoute
   UserAddressAddAddressRoute: typeof UserAddressAddAddressRoute
   UserAddressIndexRoute: typeof UserAddressIndexRoute
@@ -238,6 +258,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductProductIdRoute: ProductProductIdRoute,
   UserCartLazyRoute: UserCartLazyRoute,
   UserProfileLazyRoute: UserProfileLazyRoute,
+  CartIndexRoute: CartIndexRoute,
   UserAddressAddressRoute: UserAddressAddressRoute,
   UserAddressAddAddressRoute: UserAddressAddAddressRoute,
   UserAddressIndexRoute: UserAddressIndexRoute,
@@ -261,6 +282,7 @@ export const routeTree = rootRoute
         "/product/$productId",
         "/user/cart",
         "/user/profile",
+        "/cart/",
         "/user/address/$address",
         "/user/address/add-address",
         "/user/address/"
@@ -283,6 +305,9 @@ export const routeTree = rootRoute
     },
     "/user/profile": {
       "filePath": "user/profile.lazy.tsx"
+    },
+    "/cart/": {
+      "filePath": "cart/index.jsx"
     },
     "/user/address/$address": {
       "filePath": "user/address/$address.tsx"

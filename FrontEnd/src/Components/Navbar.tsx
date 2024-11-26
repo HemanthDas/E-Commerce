@@ -91,7 +91,7 @@ const Navbar = () => {
                 </div>
                 {isDropdownVisible && (
                   <ul
-                    className="absolute bg-white top-full mt-2 right-0 p-5 shadow-md rounded-md"
+                    className="absolute bg-white top-full mt-2 right-0 p-5 shadow-md rounded-md z-50"
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
                   >

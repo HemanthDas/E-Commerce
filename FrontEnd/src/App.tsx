@@ -3,7 +3,7 @@ import Carousel from "./Components/MainPageComponents/Carousel";
 
 function App() {
   return (
-    <div className="h-full bg-white">
+    <div className="h-full">
       <Carousel />
       <ProductsList />
     </div>
