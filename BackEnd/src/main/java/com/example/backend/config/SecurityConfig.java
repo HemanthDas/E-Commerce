@@ -37,7 +37,8 @@ public class SecurityConfig {
                     authorizeRequests
                             .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register")
                             .permitAll()
-                            .requestMatchers(HttpMethod.GET,"/address/getlocation")
+                            .requestMatchers(HttpMethod.GET,"/address/getlocation",
+                                    "/product/**","/category/all")
                             .permitAll()
                             .anyRequest()
                             .authenticated();

@@ -40,17 +40,18 @@ public class User {
     private List<Address> addresses = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "ENUM('CUSTOMER', 'ADMIN') DEFAULT 'CUSTOMER'")
+    @Column(nullable = false, columnDefinition = "ENUM('CUSTOMER', 'ADMIN', 'SELLER') DEFAULT 'CUSTOMER'")
     private Role role = Role.CUSTOMER;
 
         public enum Role {
-            CUSTOMER, ADMIN;
+            CUSTOMER, ADMIN, SELLER;
 
             public static Role fromString(String role) {
-                if (role == null || role.isEmpty()) {
-                    return null;
+                try {
+                    return Role.valueOf(role.toUpperCase());
+                } catch (IllegalArgumentException | NullPointerException e) {
+                    return CUSTOMER;
                 }
-                return Role.valueOf(role.toUpperCase());
             }
         }
 
