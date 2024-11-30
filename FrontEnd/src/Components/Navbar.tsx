@@ -74,7 +74,7 @@ const Navbar = () => {
           <Link
             className="p-2 max-lg:max-w-48"
             to={location.pathname}
-            search={(prev) => ({ ...prev, pop: "location" })}
+            search={(prev: Record<string, any>) => ({ ...prev, pop: "location" })}
             
           >
             {userLocation?.location || "Location"}
