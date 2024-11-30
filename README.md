@@ -12,7 +12,7 @@ This is an E-Commerce application. Follow the instructions below to run the appl
 1. Clone the repository:
 
    ```sh
-   git clone https://github.com/yourusername/e-commerce.git
+   git clone https://github.com/HemanthDas/E-Commerce
    cd e-commerce
    ```
 
