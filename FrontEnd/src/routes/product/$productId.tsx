@@ -18,7 +18,8 @@ export const Route = createFileRoute("/product/$productId")({
     if (!productId) {
       throw new Error("Product ID is required");
     }
-    return await getProductById(productId);
+    const product = await getProductById(productId);
+    return product as ProductDTO;
   },
 });
 
