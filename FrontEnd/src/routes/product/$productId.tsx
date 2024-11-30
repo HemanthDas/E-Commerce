@@ -7,7 +7,7 @@ import {
   getProductByCategory,
   OtherProductDto,
 } from "../../api/productApi";
-import ProductBox from "../../Components/ProductBox";
+import ProductBox from "../../Components/productBox";
 import { decodeId } from "../../utils/Encoder";
 import { useState } from "react";
 

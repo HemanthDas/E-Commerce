@@ -6,7 +6,7 @@ import {
   getAllCategories,
   getAllProducts,
 } from "../../api/productApi";
-import ProductBox from "../ProductBox";
+import ProductBox from "../productBox";
 
 const ProductsList = () => {
   const { data, isLoading } = useQuery<AllProducts[]>({

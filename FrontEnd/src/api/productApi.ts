@@ -1,16 +1,16 @@
-export type AllProducts = {
+export interface AllProducts {
   product_id: string;
   product_name: string;
   product_price: number;
   product_imageUrl: string;
   product_category_id: string;
-};
-export type AllCategories = {
+}
+export interface AllCategories {
   id: string;
   name: string;
   description: string;
-};
-export type ProductDTO = {
+}
+export interface ProductDTO {
   id: string;
   name: string;
   price: number;
@@ -18,8 +18,8 @@ export type ProductDTO = {
   description: string;
   category: AllCategories;
   image: string;
-};
-export type OtherProductDto = {
+}
+export interface OtherProductDto {
   id: string;
   name: string;
   price: number;
@@ -27,7 +27,7 @@ export type OtherProductDto = {
   description: string;
   categoryId: string;
   imageUrl: string;
-};
+}
 export const getAllProducts = async () => {
   const response = await fetch(
     `${import.meta.env.VITE_BACKEND_URL}/api/product/getAll`
