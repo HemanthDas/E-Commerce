@@ -1,8 +1,9 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/testecommerce
-    username: testadmin
-    password: tester
+
+    url: jdbc:mysql://autorack.proxy.rlwy.net:21335/railway #mysql://root:BQTkaWtjYojhxiLpYFuGiQwbSCczyTRH@autorack.proxy.rlwy.net:21335/railway
+    username: root
+    password: BQTkaWtjYojhxiLpYFuGiQwbSCczyTRH
 
   jpa:
     hibernate:
