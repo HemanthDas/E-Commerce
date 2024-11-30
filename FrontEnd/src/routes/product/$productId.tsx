@@ -24,7 +24,7 @@ export const Route = createFileRoute("/product/$productId")({
 });
 
 function ProductPage() {
-  const product = Route.useLoaderData<ProductDTO>();
+  const product = Route.useLoaderData();
   const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState("");
   const addingProductToCard = () => {
